@@ -1,0 +1,687 @@
+#Init infrastructure
+Terraform initialized in an empty directory!
+
+The directory has no Terraform configuration files. You may begin working
+with Terraform immediately by creating Terraform configuration files.
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # google_dataproc_cluster.basic-cluster will be created
+  + resource "google_dataproc_cluster" "basic-cluster" {
+      + graceful_decommission_timeout = "120s"
+      + id                            = (known after apply)
+      + labels                        = (known after apply)
+      + name                          = "bd1"
+      + project                       = (known after apply)
+      + region                        = "europe-west1"
+
+      + cluster_config {
+          + bucket         = (known after apply)
+          + staging_bucket = "bd1-datproc-staging-data"
+          + temp_bucket    = (known after apply)
+
+          + endpoint_config {
+              + enable_http_port_access = (known after apply)
+              + http_ports              = (known after apply)
+            }
+
+          + gce_cluster_config {
+              + internal_ip_only       = false
+              + network                = (known after apply)
+              + service_account        = (known after apply)
+              + service_account_scopes = [
+                  + "https://www.googleapis.com/auth/cloud-platform",
+                ]
+              + zone                   = (known after apply)
+
+              + shielded_instance_config {
+                  + enable_integrity_monitoring = (known after apply)
+                  + enable_secure_boot          = (known after apply)
+                  + enable_vtpm                 = (known after apply)
+                }
+            }
+
+          + master_config {
+              + image_uri        = (known after apply)
+              + instance_names   = (known after apply)
+              + machine_type     = "n1-standard-2"
+              + min_cpu_platform = (known after apply)
+              + num_instances    = 1
+
+              + disk_config {
+                  + boot_disk_size_gb = 30
+                  + boot_disk_type    = "pd-ssd"
+                  + num_local_ssds    = (known after apply)
+                }
+            }
+
+          + preemptible_worker_config {
+              + instance_names = (known after apply)
+              + num_instances  = 0
+              + preemptibility = "PREEMPTIBLE"
+
+              + disk_config {
+                  + boot_disk_size_gb = (known after apply)
+                  + boot_disk_type    = (known after apply)
+                  + num_local_ssds    = (known after apply)
+                }
+            }
+
+          + software_config {
+              + image_version       = (known after apply)
+              + optional_components = (known after apply)
+              + override_properties = (known after apply)
+              + properties          = (known after apply)
+            }
+
+          + worker_config {
+              + image_uri        = (known after apply)
+              + instance_names   = (known after apply)
+              + machine_type     = "n1-standard-2"
+              + min_cpu_platform = (known after apply)
+              + num_instances    = 2
+
+              + disk_config {
+                  + boot_disk_size_gb = 30
+                  + boot_disk_type    = "pd-standard"
+                  + num_local_ssds    = 1
+                }
+            }
+        }
+
+      + virtual_cluster_config {
+          + staging_bucket = (known after apply)
+
+          + auxiliary_services_config {
+              + metastore_config {
+                  + dataproc_metastore_service = (known after apply)
+                }
+
+              + spark_history_server_config {
+                  + dataproc_cluster = (known after apply)
+                }
+            }
+
+          + kubernetes_cluster_config {
+              + kubernetes_namespace = (known after apply)
+
+              + gke_cluster_config {
+                  + gke_cluster_target = (known after apply)
+
+                  + node_pool_target {
+                      + node_pool = (known after apply)
+                      + roles     = (known after apply)
+
+                      + node_pool_config {
+                          + locations = (known after apply)
+
+                          + autoscaling {
+                              + max_node_count = (known after apply)
+                              + min_node_count = (known after apply)
+                            }
+
+                          + config {
+                              + local_ssd_count  = (known after apply)
+                              + machine_type     = (known after apply)
+                              + min_cpu_platform = (known after apply)
+                              + preemptible      = (known after apply)
+                              + spot             = (known after apply)
+                            }
+                        }
+                    }
+                }
+
+              + kubernetes_software_config {
+                  + component_version = (known after apply)
+                  + properties        = (known after apply)
+                }
+            }
+        }
+    }
+
+  # google_project_iam_binding.default["roles/dataproc.worker"] will be created
+  + resource "google_project_iam_binding" "default" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + members = (known after apply)
+      + project = "hobby-367318"
+      + role    = "roles/dataproc.worker"
+    }
+
+  # google_project_iam_binding.default["roles/storage.admin"] will be created
+  + resource "google_project_iam_binding" "default" {
+      + etag    = (known after apply)
+      + id      = (known after apply)
+      + members = (known after apply)
+      + project = "hobby-367318"
+      + role    = "roles/storage.admin"
+    }
+
+  # google_service_account.default will be created
+  + resource "google_service_account" "default" {
+      + account_id   = "dataproc-default"
+      + disabled     = false
+      + display_name = "Dataproc default"
+      + email        = (known after apply)
+      + id           = (known after apply)
+      + member       = (known after apply)
+      + name         = (known after apply)
+      + project      = (known after apply)
+      + unique_id    = (known after apply)
+    }
+
+  # google_storage_bucket.basic-data will be created
+  + resource "google_storage_bucket" "basic-data" {
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EU"
+      + name                        = "bd1-dataproc-data"
+      + project                     = (known after apply)
+      + public_access_prevention    = "enforced"
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + uniform_bucket_level_access = (known after apply)
+      + url                         = (known after apply)
+
+      + versioning {
+          + enabled = (known after apply)
+        }
+    }
+
+  # google_storage_bucket.staging-data will be created
+  + resource "google_storage_bucket" "staging-data" {
+      + force_destroy               = true
+      + id                          = (known after apply)
+      + location                    = "EU"
+      + name                        = "bd1-datproc-staging-data"
+      + project                     = (known after apply)
+      + public_access_prevention    = "enforced"
+      + self_link                   = (known after apply)
+      + storage_class               = "STANDARD"
+      + uniform_bucket_level_access = (known after apply)
+      + url                         = (known after apply)
+
+      + versioning {
+          + enabled = (known after apply)
+        }
+    }
+
+Plan: 6 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + data-bucket-name     = "bd1-dataproc-data"
+  + dataproc-master-node = (known after apply)
+  + dataproc-zone        = (known after apply)
+google_storage_bucket.basic-data: Creating...
+google_storage_bucket.staging-data: Creating...
+google_service_account.default: Creating...
+google_service_account.default: Creation complete after 1s [id=projects/hobby-367318/serviceAccounts/dataproc-default@hobby-367318.iam.gserviceaccount.com]
+google_project_iam_binding.default["roles/storage.admin"]: Creating...
+google_project_iam_binding.default["roles/dataproc.worker"]: Creating...
+google_storage_bucket.basic-data: Creation complete after 2s [id=bd1-dataproc-data]
+google_storage_bucket.staging-data: Creation complete after 2s [id=bd1-datproc-staging-data]
+google_project_iam_binding.default["roles/storage.admin"]: Creation complete after 10s [id=hobby-367318/roles/storage.admin]
+google_project_iam_binding.default["roles/dataproc.worker"]: Creation complete after 10s [id=hobby-367318/roles/dataproc.worker]
+google_dataproc_cluster.basic-cluster: Creating...
+google_dataproc_cluster.basic-cluster: Still creating... [10s elapsed]
+google_dataproc_cluster.basic-cluster: Still creating... [20s elapsed]
+google_dataproc_cluster.basic-cluster: Still creating... [30s elapsed]
+google_dataproc_cluster.basic-cluster: Still creating... [40s elapsed]
+google_dataproc_cluster.basic-cluster: Still creating... [50s elapsed]
+google_dataproc_cluster.basic-cluster: Still creating... [1m0s elapsed]
+google_dataproc_cluster.basic-cluster: Still creating... [1m10s elapsed]
+google_dataproc_cluster.basic-cluster: Still creating... [1m20s elapsed]
+google_dataproc_cluster.basic-cluster: Creation complete after 2m34s [id=projects/hobby-367318/regions/europe-west1/clusters/bd1]
+
+Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
+
+Outputs:
+
+data-bucket-name = "bd1-dataproc-data"
+dataproc-master-node = "bd1-m"
+dataproc-zone = "europe-west1-b"
+If you experience problems with multiprocessing on MacOS, they might be related to https://bugs.python.org/issue33725. You can disable multiprocessing by editing your .boto config or by adding the following flag to your command: `-o "GSUtil:parallel_process_count=1"`. Note that multithreading is still available even if you disable multiprocessing.
+
+#Copying data to gs bucket
+Copying file:///Users/petryna/Documents/GitHub/pet/big-data-1/data/UO.zip [Content-Type=application/zip]...
+/ [0/3 files][    0.0 B/437.6 MiB]   0% Done                                  ==> NOTE: You are uploading one or more large file(s), which would run
+significantly faster if you enable parallel composite uploads. This
+feature can be enabled by editing the
+"parallel_composite_upload_threshold" value in your .boto
+configuration file. However, note that if you do this large files will
+be uploaded as `composite objects
+<https://cloud.google.com/storage/docs/composite-objects>`_,which
+means that any user who downloads such objects will need to have a
+compiled crcmod installed (see "gsutil help crcmod"). This is because
+without a compiled crcmod, computing checksums on composite objects is
+so slow that gsutil disables downloads of composite objects.
+
+Copying file:///Users/petryna/Documents/GitHub/pet/big-data-1/data/FOP.zip [Content-Type=application/zip]...
+/ [0/3 files][    0.0 B/437.6 MiB]   0% Done                                  Copying file:///Users/petryna/Documents/GitHub/pet/big-data-1/data/.DS_Store [Content-Type=application/octet-stream]...
+/ [0/3 files][    0.0 B/437.6 MiB]   0% Done                                  / [1/3 files][534.0 KiB/437.6 MiB]   0% Done                                  \ [1/3 files][ 12.4 MiB/437.6 MiB]   2% Done                                  | [1/3 files][ 19.1 MiB/437.6 MiB]   4% Done                                  - [1/3 files][ 28.1 MiB/437.6 MiB]   6% Done                                  \ [1/3 files][ 37.4 MiB/437.6 MiB]   8% Done                                  / [1/3 files][ 46.2 MiB/437.6 MiB]  10% Done                                  \ [1/3 files][ 55.4 MiB/437.6 MiB]  12% Done                                  | [1/3 files][ 64.7 MiB/437.6 MiB]  14% Done                                  - [1/3 files][ 74.3 MiB/437.6 MiB]  16% Done                                  \ [1/3 files][ 83.5 MiB/437.6 MiB]  19% Done                                  / [1/3 files][ 92.6 MiB/437.6 MiB]  21% Done                                  \ [1/3 files][102.4 MiB/437.6 MiB]  23% Done   9.1 MiB/s ETA 00:00:37         | [1/3 files][111.4 MiB/437.6 MiB]  25% Done   9.0 MiB/s ETA 00:00:36         - [1/3 files][120.2 MiB/437.6 MiB]  27% Done   8.9 MiB/s ETA 00:00:36         | [1/3 files][129.7 MiB/437.6 MiB]  29% Done   9.0 MiB/s ETA 00:00:34         / [1/3 files][140.0 MiB/437.6 MiB]  31% Done   9.3 MiB/s ETA 00:00:32         \ [1/3 files][149.0 MiB/437.6 MiB]  34% Done   9.2 MiB/s ETA 00:00:31         | [1/3 files][159.6 MiB/437.6 MiB]  36% Done   9.5 MiB/s ETA 00:00:29         - [1/3 files][170.4 MiB/437.6 MiB]  38% Done   9.8 MiB/s ETA 00:00:27         | [1/3 files][181.8 MiB/437.6 MiB]  41% Done  10.1 MiB/s ETA 00:00:25         / [1/3 files][193.4 MiB/437.6 MiB]  44% Done  10.3 MiB/s ETA 00:00:24         \ [1/3 files][203.9 MiB/437.6 MiB]  46% Done  10.4 MiB/s ETA 00:00:23         | [1/3 files][210.5 MiB/437.6 MiB]  48% Done   9.4 MiB/s ETA 00:00:24         / [2/3 files][210.8 MiB/437.6 MiB]  48% Done   9.2 MiB/s ETA 00:00:25         - [2/3 files][213.9 MiB/437.6 MiB]  48% Done   7.6 MiB/s ETA 00:00:29         | [2/3 files][218.0 MiB/437.6 MiB]  49% Done   6.2 MiB/s ETA 00:00:35         - [2/3 files][224.0 MiB/437.6 MiB]  51% Done   5.2 MiB/s ETA 00:00:41         \ [2/3 files][230.9 MiB/437.6 MiB]  52% Done   4.6 MiB/s ETA 00:00:45         / [2/3 files][238.9 MiB/437.6 MiB]  54% Done   5.6 MiB/s ETA 00:00:36         - [2/3 files][247.2 MiB/437.6 MiB]  56% Done   6.6 MiB/s ETA 00:00:29         | [2/3 files][254.9 MiB/437.6 MiB]  58% Done   7.2 MiB/s ETA 00:00:25         - [2/3 files][263.1 MiB/437.6 MiB]  60% Done   7.5 MiB/s ETA 00:00:23         \ [2/3 files][271.1 MiB/437.6 MiB]  61% Done   7.6 MiB/s ETA 00:00:22         / [2/3 files][280.9 MiB/437.6 MiB]  64% Done   7.9 MiB/s ETA 00:00:20         \ [2/3 files][291.0 MiB/437.6 MiB]  66% Done   8.3 MiB/s ETA 00:00:18         | [2/3 files][301.6 MiB/437.6 MiB]  68% Done   8.8 MiB/s ETA 00:00:15         - [2/3 files][312.6 MiB/437.6 MiB]  71% Done   9.4 MiB/s ETA 00:00:13         | [2/3 files][324.2 MiB/437.6 MiB]  74% Done  10.0 MiB/s ETA 00:00:11         / [2/3 files][335.3 MiB/437.6 MiB]  76% Done  10.0 MiB/s ETA 00:00:10         \ [2/3 files][348.7 MiB/437.6 MiB]  79% Done  10.6 MiB/s ETA 00:00:08         / [2/3 files][359.8 MiB/437.6 MiB]  82% Done  10.7 MiB/s ETA 00:00:07         - [2/3 files][370.9 MiB/437.6 MiB]  84% Done  10.8 MiB/s ETA 00:00:06         | [2/3 files][380.7 MiB/437.6 MiB]  86% Done  10.5 MiB/s ETA 00:00:05         / [2/3 files][392.3 MiB/437.6 MiB]  89% Done  10.4 MiB/s ETA 00:00:04         \ [2/3 files][404.9 MiB/437.6 MiB]  92% Done  10.6 MiB/s ETA 00:00:03         / [2/3 files][416.0 MiB/437.6 MiB]  95% Done  10.7 MiB/s ETA 00:00:02         - [2/3 files][426.8 MiB/437.6 MiB]  97% Done  10.6 MiB/s ETA 00:00:01         | [2/3 files][436.6 MiB/437.6 MiB]  99% Done  10.4 MiB/s ETA 00:00:00         | [3/3 files][437.6 MiB/437.6 MiB] 100% Done   9.2 MiB/s ETA 00:00:00         /
+Operation completed over 3 objects/437.6 MiB.
+If you experience problems with multiprocessing on MacOS, they might be related to https://bugs.python.org/issue33725. You can disable multiprocessing by editing your .boto config or by adding the following flag to your command: `-o "GSUtil:parallel_process_count=1"`. Note that multithreading is still available even if you disable multiprocessing.
+
+Copying file:///Users/petryna/Documents/GitHub/pet/big-data-1/jobs/hadoop-examples-1.2.1.jar [Content-Type=application/java-archive]...
+/ [0/1 files][    0.0 B/139.4 KiB]   0% Done                                  / [1/1 files][139.4 KiB/139.4 KiB] 100% Done
+Operation completed over 1 objects/139.4 KiB.
+
+#Setting up ssh certificates and connection settings
+loginProfile:
+  name: '107336933568844262037'
+  posixAccounts:
+  - accountId: hobby-367318
+    gid: '833494191'
+    homeDirectory: /home/vovapetrina11_vp_gmail_com
+    name: users/vovapetrina11.vp@gmail.com/projects/hobby-367318
+    operatingSystemType: LINUX
+    primary: true
+    uid: '833494191'
+    username: vovapetrina11_vp_gmail_com
+  sshPublicKeys:
+    8e576e2ddea92d0836ef696c56393167e01274c0e3bf9f18e4f7676aa942bdb4:
+      fingerprint: 8e576e2ddea92d0836ef696c56393167e01274c0e3bf9f18e4f7676aa942bdb4
+      key: /Users/petryna/.ssh/google_compute_engine
+      name: users/vovapetrina11.vp@gmail.com/sshPublicKeys/8e576e2ddea92d0836ef696c56393167e01274c0e3bf9f18e4f7676aa942bdb4
+Warning: Permanently added 'compute.6107058342608806097' (ED25519) to the list of known hosts.
+
+#Copying data to dataproc cluster from bucket
+Copying gs://bd1-dataproc-data/jobs/hadoop-examples-1.2.1.jar...
+/ [0 files][    0.0 B/139.4 KiB]                                              / [1 files][139.4 KiB/139.4 KiB]
+Operation completed over 1 objects/139.4 KiB.
+total 148
+drwxr-xr-x 2 petryna petryna   4096 Nov  4 14:17 .
+drwxr-xr-x 7 petryna petryna   4096 Nov  4 14:17 ..
+-rw-r--r-- 1 petryna petryna 142726 Nov  4 14:17 hadoop-examples-1.2.1.jar
+Copying gs://bd1-dataproc-data/data/.DS_Store...
+/ [0 files][    0.0 B/  6.0 KiB]                                              / [1 files][  6.0 KiB/  6.0 KiB]                                              Copying gs://bd1-dataproc-data/data/FOP.zip...
+/ [1 files][  6.0 KiB/245.1 MiB]                                              - [1 files][ 46.2 MiB/245.1 MiB]                                              | [1 files][110.4 MiB/245.1 MiB]                                              - [1 files][174.3 MiB/245.1 MiB]                                              \ [1 files][237.4 MiB/245.1 MiB]                                              \ [2 files][245.1 MiB/245.1 MiB]                                              Copying gs://bd1-dataproc-data/data/UO.zip...
+\ [2 files][245.1 MiB/437.6 MiB]                                              / [2 files][345.7 MiB/437.6 MiB]                                              \ [3 files][437.6 MiB/437.6 MiB]
+Operation completed over 3 objects/437.6 MiB.
+total 448144
+drwxr-xr-x 2 petryna petryna      4096 Nov  4 14:18 .
+drwxr-xr-x 8 petryna petryna      4096 Nov  4 14:17 ..
+-rw-r--r-- 1 petryna petryna      6148 Nov  4 14:17 .DS_Store
+-rw-r--r-- 1 petryna petryna 257039255 Nov  4 14:18 FOP.zip
+-rw-r--r-- 1 petryna petryna 201840132 Nov  4 14:18 UO.zip
+
+#Preparing data at dataproc cluster
+Archive:  /home/petryna/data/UO.zip
+  inflating: /home/petryna/data/UO.csv
+Archive:  /home/petryna/data/FOP.zip
+  inflating: /home/petryna/data/FOP.csv
+
+#Create and populate hive table
+Hive Session ID = 0bbfba7b-9c51-49b6-8e26-879971254a0a
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j2.properties Async: true
+Hive Session ID = 583f483b-d205-425e-8c1b-56db808f3c62
+OK
+Time taken: 2.271 seconds
+OK
+Time taken: 1.487 seconds
+
+#Create and populate hive table
+Hive Session ID = 4437affc-6d99-4406-9b67-a6146302b600
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j2.properties Async: true
+Hive Session ID = eccb4e49-7902-49dd-9cf7-b7d1f39ebddf
+OK
+Time taken: 2.246 seconds
+OK
+Time taken: 0.542 seconds
+
+#Select count
+Hive Session ID = a7aa6c4d-88ec-41e0-8e65-8e4b131c1343
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j2.properties Async: true
+Hive Session ID = 131253bb-89cf-4cb9-bfb8-b83dfd055054
+Query ID = petryna_20221104135955_0802f325-1638-4faa-bbca-c445f914358f
+Total jobs = 1
+Launching Job 1 out of 1
+Status: Running (Executing on YARN cluster with App id application_1667569937321_0008)
+
+OK
+1659657
+Time taken: 83.387 seconds, Fetched: 1 row(s)
+
+#Select analysis
+Hive Session ID = 07b53acd-98ad-4af6-96ba-59fe6dc121f5
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j2.properties Async: true
+Hive Session ID = 7e84b882-a97e-48c9-ace0-8c5084ef3508
+Query ID = petryna_20221104140133_0012989a-a8ec-4350-b346-170c7f38c212
+Total jobs = 1
+Launching Job 1 out of 1
+Status: Running (Executing on YARN cluster with App id application_1667569937321_0010)
+
+OK
+Time taken: 53.581 seconds, Fetched: 20 row(s)
+
+#Select join
+Hive Session ID = ea8de268-a86d-4644-bf7e-16f1f5116340
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j2.properties Async: true
+Hive Session ID = dff8b6ef-c27e-4655-be16-eed9b8cb4670
+Query ID = petryna_20221104140246_672e9468-3bef-453e-96f9-b9727823361f
+Total jobs = 1
+Launching Job 1 out of 1
+Status: Running (Executing on YARN cluster with App id application_1667569937321_0012)
+
+OK
+Time taken: 121.847 seconds, Fetched: 20 row(s)
+
+#Hadoop map reduce
+2022-11-04 14:04:54,856 INFO client.RMProxy: Connecting to ResourceManager at bd1-m/10.132.0.41:8032
+2022-11-04 14:04:55,202 INFO client.AHSProxy: Connecting to Application History server at bd1-m/10.132.0.41:10200
+2022-11-04 14:04:55,547 INFO mapreduce.JobResourceUploader: Disabling Erasure Coding for path: /tmp/hadoop-yarn/staging/petryna/.staging/job_1667569937321_0013
+2022-11-04 14:04:55,959 INFO input.FileInputFormat: Total input files to process : 1
+2022-11-04 14:04:56,076 INFO mapreduce.JobSubmitter: number of splits:10
+2022-11-04 14:04:56,372 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1667569937321_0013
+2022-11-04 14:04:56,374 INFO mapreduce.JobSubmitter: Executing with tokens: []
+2022-11-04 14:04:56,644 INFO conf.Configuration: resource-types.xml not found
+2022-11-04 14:04:56,644 INFO resource.ResourceUtils: Unable to find 'resource-types.xml'.
+2022-11-04 14:04:56,751 INFO impl.YarnClientImpl: Submitted application application_1667569937321_0013
+2022-11-04 14:04:56,803 INFO mapreduce.Job: The url to track the job: http://bd1-m:8088/proxy/application_1667569937321_0013/
+2022-11-04 14:04:56,804 INFO mapreduce.Job: Running job: job_1667569937321_0013
+2022-11-04 14:05:07,122 INFO mapreduce.Job: Job job_1667569937321_0013 running in uber mode : false
+2022-11-04 14:05:07,124 INFO mapreduce.Job:  map 0% reduce 0%
+2022-11-04 14:05:24,291 INFO mapreduce.Job:  map 6% reduce 0%
+2022-11-04 14:05:27,315 INFO mapreduce.Job:  map 18% reduce 0%
+2022-11-04 14:05:28,334 INFO mapreduce.Job:  map 22% reduce 0%
+2022-11-04 14:05:39,411 INFO mapreduce.Job:  map 23% reduce 0%
+2022-11-04 14:05:43,437 INFO mapreduce.Job:  map 36% reduce 0%
+2022-11-04 14:05:48,474 INFO mapreduce.Job:  map 40% reduce 0%
+2022-11-04 14:06:02,581 INFO mapreduce.Job:  map 52% reduce 0%
+2022-11-04 14:06:03,590 INFO mapreduce.Job:  map 58% reduce 0%
+2022-11-04 14:06:07,620 INFO mapreduce.Job:  map 62% reduce 0%
+2022-11-04 14:06:14,663 INFO mapreduce.Job:  map 63% reduce 0%
+2022-11-04 14:06:18,686 INFO mapreduce.Job:  map 70% reduce 0%
+2022-11-04 14:06:23,714 INFO mapreduce.Job:  map 76% reduce 0%
+2022-11-04 14:06:28,745 INFO mapreduce.Job:  map 80% reduce 0%
+2022-11-04 14:06:34,791 INFO mapreduce.Job:  map 90% reduce 0%
+2022-11-04 14:06:37,808 INFO mapreduce.Job:  map 96% reduce 0%
+2022-11-04 14:06:43,848 INFO mapreduce.Job:  map 97% reduce 0%
+2022-11-04 14:06:46,864 INFO mapreduce.Job:  map 100% reduce 0%
+2022-11-04 14:06:58,915 INFO mapreduce.Job:  map 100% reduce 33%
+2022-11-04 14:07:04,946 INFO mapreduce.Job:  map 100% reduce 67%
+2022-11-04 14:07:05,958 INFO mapreduce.Job:  map 100% reduce 100%
+2022-11-04 14:07:06,979 INFO mapreduce.Job: Job job_1667569937321_0013 completed successfully
+2022-11-04 14:07:07,264 INFO mapreduce.Job: Counters: 56
+        File System Counters
+                FILE: Number of bytes read=500406173
+                FILE: Number of bytes written=756665560
+                FILE: Number of read operations=0
+                FILE: Number of large read operations=0
+                FILE: Number of write operations=0
+                HDFS: Number of bytes read=1238403933
+                HDFS: Number of bytes written=154169637
+                HDFS: Number of read operations=45
+                HDFS: Number of large read operations=0
+                HDFS: Number of write operations=9
+                HDFS: Number of bytes read erasure-coded=0
+        Job Counters
+                Killed map tasks=1
+                Killed reduce tasks=1
+                Launched map tasks=11
+                Launched reduce tasks=4
+                Data-local map tasks=11
+                Total time spent by all maps in occupied slots (ms)=831575040
+                Total time spent by all reduces in occupied slots (ms)=124290048
+                Total time spent by all map tasks (ms)=270695
+                Total time spent by all reduce tasks (ms)=40459
+                Total vcore-milliseconds taken by all map tasks=270695
+                Total vcore-milliseconds taken by all reduce tasks=40459
+                Total megabyte-milliseconds taken by all map tasks=831575040
+                Total megabyte-milliseconds taken by all reduce tasks=124290048
+        Map-Reduce Framework
+                Map input records=1659657
+                Map output records=72809375
+                Map output bytes=1528955397
+                Map output materialized bytes=253131045
+                Input split bytes=990
+                Combine input records=72809375
+                Combine output records=7452769
+                Reduce input groups=4805600
+                Reduce shuffle bytes=253131045
+                Reduce input records=7452769
+                Reduce output records=4805600
+                Spilled Records=22176111
+                Shuffled Maps =30
+                Failed Shuffles=0
+                Merged Map outputs=30
+                GC time elapsed (ms)=4142
+                CPU time spent (ms)=249490
+                Physical memory (bytes) snapshot=9286098944
+                Virtual memory (bytes) snapshot=56947847168
+                Total committed heap usage (bytes)=8825864192
+                Peak Map Physical memory (bytes)=874389504
+                Peak Map Virtual memory (bytes)=4391735296
+                Peak Reduce Physical memory (bytes)=453517312
+                Peak Reduce Virtual memory (bytes)=4399448064
+        Shuffle Errors
+                BAD_ID=0
+                CONNECTION=0
+                IO_ERROR=0
+                WRONG_LENGTH=0
+                WRONG_MAP=0
+                WRONG_REDUCE=0
+        File Input Format Counters
+                Bytes Read=1238402943
+        File Output Format Counters
+                Bytes Written=154169637
+
+#PG test count
+real    0m2.307s
+user    0m0.004s
+sys     0m0.004s
+
+#PG test analytics
+real    0m1.286s
+user    0m0.004s
+sys     0m0.005s
+
+#PG test join
+real    0m7.294s
+user    0m0.005s
+sys     0m0.007s
+
+#Cleanup infrastructure
+google_storage_bucket.staging-data: Refreshing state... [id=bd1-datproc-staging-data]
+google_storage_bucket.basic-data: Refreshing state... [id=bd1-dataproc-data]
+google_service_account.default: Refreshing state... [id=projects/hobby-367318/serviceAccounts/dataproc-default@hobby-367318.iam.gserviceaccount.com]
+google_project_iam_binding.default["roles/storage.admin"]: Refreshing state... [id=hobby-367318/roles/storage.admin]
+google_project_iam_binding.default["roles/dataproc.worker"]: Refreshing state... [id=hobby-367318/roles/dataproc.worker]
+google_dataproc_cluster.basic-cluster: Refreshing state... [id=projects/hobby-367318/regions/europe-west1/clusters/bd1]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  # google_dataproc_cluster.basic-cluster will be destroyed
+  - resource "google_dataproc_cluster" "basic-cluster" {
+      - graceful_decommission_timeout = "120s" -> null
+      - id                            = "projects/hobby-367318/regions/europe-west1/clusters/bd1" -> null
+      - labels                        = {
+          - "goog-dataproc-cluster-name" = "bd1"
+          - "goog-dataproc-cluster-uuid" = "469d2d13-9077-4b43-b888-b8dd5c466f48"
+          - "goog-dataproc-location"     = "europe-west1"
+        } -> null
+      - name                          = "bd1" -> null
+      - project                       = "hobby-367318" -> null
+      - region                        = "europe-west1" -> null
+
+      - cluster_config {
+          - bucket         = "bd1-datproc-staging-data" -> null
+          - staging_bucket = "bd1-datproc-staging-data" -> null
+          - temp_bucket    = "dataproc-temp-europe-west1-832586954629-1kvmekw0" -> null
+
+          - endpoint_config {
+              - enable_http_port_access = false -> null
+              - http_ports              = {} -> null
+            }
+
+          - gce_cluster_config {
+              - internal_ip_only       = false -> null
+              - metadata               = {} -> null
+              - network                = "https://www.googleapis.com/compute/v1/projects/hobby-367318/global/networks/default" -> null
+              - service_account        = "dataproc-default@hobby-367318.iam.gserviceaccount.com" -> null
+              - service_account_scopes = [
+                  - "https://www.googleapis.com/auth/cloud-platform",
+                  - "https://www.googleapis.com/auth/cloud.useraccounts.readonly",
+                  - "https://www.googleapis.com/auth/devstorage.read_write",
+                  - "https://www.googleapis.com/auth/logging.write",
+                ] -> null
+              - tags                   = [] -> null
+              - zone                   = "europe-west1-b" -> null
+            }
+
+          - master_config {
+              - image_uri        = "https://www.googleapis.com/compute/v1/projects/cloud-dataproc/global/images/dataproc-2-0-deb10-20221014-050202-rc01" -> null
+              - instance_names   = [
+                  - "bd1-m",
+                ] -> null
+              - machine_type     = "n1-standard-2" -> null
+              - min_cpu_platform = "AUTOMATIC" -> null
+              - num_instances    = 1 -> null
+
+              - disk_config {
+                  - boot_disk_size_gb = 30 -> null
+                  - boot_disk_type    = "pd-ssd" -> null
+                  - num_local_ssds    = 0 -> null
+                }
+            }
+
+          - preemptible_worker_config {
+              - instance_names = [] -> null
+              - num_instances  = 0 -> null
+              - preemptibility = "PREEMPTIBLE" -> null
+            }
+
+          - software_config {
+              - image_version       = "2.0.49-debian10" -> null
+              - optional_components = [] -> null
+              - override_properties = {} -> null
+              - properties          = {} -> null
+            }
+
+          - worker_config {
+              - image_uri        = "https://www.googleapis.com/compute/v1/projects/cloud-dataproc/global/images/dataproc-2-0-deb10-20221014-050202-rc01" -> null
+              - instance_names   = [
+                  - "bd1-w-0",
+                  - "bd1-w-1",
+                ] -> null
+              - machine_type     = "n1-standard-2" -> null
+              - min_cpu_platform = "AUTOMATIC" -> null
+              - num_instances    = 2 -> null
+
+              - disk_config {
+                  - boot_disk_size_gb = 30 -> null
+                  - boot_disk_type    = "pd-standard" -> null
+                  - num_local_ssds    = 1 -> null
+                }
+            }
+        }
+    }
+
+  # google_project_iam_binding.default["roles/dataproc.worker"] will be destroyed
+  - resource "google_project_iam_binding" "default" {
+      - etag    = "BwXspZ8vt9Y=" -> null
+      - id      = "hobby-367318/roles/dataproc.worker" -> null
+      - members = [
+          - "serviceAccount:dataproc-default@hobby-367318.iam.gserviceaccount.com",
+        ] -> null
+      - project = "hobby-367318" -> null
+      - role    = "roles/dataproc.worker" -> null
+    }
+
+  # google_project_iam_binding.default["roles/storage.admin"] will be destroyed
+  - resource "google_project_iam_binding" "default" {
+      - etag    = "BwXspZ8vt9Y=" -> null
+      - id      = "hobby-367318/roles/storage.admin" -> null
+      - members = [
+          - "serviceAccount:dataproc-default@hobby-367318.iam.gserviceaccount.com",
+        ] -> null
+      - project = "hobby-367318" -> null
+      - role    = "roles/storage.admin" -> null
+    }
+
+  # google_service_account.default will be destroyed
+  - resource "google_service_account" "default" {
+      - account_id   = "dataproc-default" -> null
+      - disabled     = false -> null
+      - display_name = "Dataproc default" -> null
+      - email        = "dataproc-default@hobby-367318.iam.gserviceaccount.com" -> null
+      - id           = "projects/hobby-367318/serviceAccounts/dataproc-default@hobby-367318.iam.gserviceaccount.com" -> null
+      - member       = "serviceAccount:dataproc-default@hobby-367318.iam.gserviceaccount.com" -> null
+      - name         = "projects/hobby-367318/serviceAccounts/dataproc-default@hobby-367318.iam.gserviceaccount.com" -> null
+      - project      = "hobby-367318" -> null
+      - unique_id    = "112841359875013874207" -> null
+    }
+
+  # google_storage_bucket.basic-data will be destroyed
+  - resource "google_storage_bucket" "basic-data" {
+      - default_event_based_hold    = false -> null
+      - force_destroy               = true -> null
+      - id                          = "bd1-dataproc-data" -> null
+      - labels                      = {} -> null
+      - location                    = "EU" -> null
+      - name                        = "bd1-dataproc-data" -> null
+      - project                     = "hobby-367318" -> null
+      - public_access_prevention    = "enforced" -> null
+      - requester_pays              = false -> null
+      - self_link                   = "https://www.googleapis.com/storage/v1/b/bd1-dataproc-data" -> null
+      - storage_class               = "STANDARD" -> null
+      - uniform_bucket_level_access = false -> null
+      - url                         = "gs://bd1-dataproc-data" -> null
+    }
+
+  # google_storage_bucket.staging-data will be destroyed
+  - resource "google_storage_bucket" "staging-data" {
+      - default_event_based_hold    = false -> null
+      - force_destroy               = true -> null
+      - id                          = "bd1-datproc-staging-data" -> null
+      - labels                      = {} -> null
+      - location                    = "EU" -> null
+      - name                        = "bd1-datproc-staging-data" -> null
+      - project                     = "hobby-367318" -> null
+      - public_access_prevention    = "enforced" -> null
+      - requester_pays              = false -> null
+      - self_link                   = "https://www.googleapis.com/storage/v1/b/bd1-datproc-staging-data" -> null
+      - storage_class               = "STANDARD" -> null
+      - uniform_bucket_level_access = false -> null
+      - url                         = "gs://bd1-datproc-staging-data" -> null
+    }
+
+Plan: 0 to add, 0 to change, 6 to destroy.
+
+Changes to Outputs:
+  - data-bucket-name     = "bd1-dataproc-data" -> null
+  - dataproc-master-node = "bd1-m" -> null
+  - dataproc-zone        = "europe-west1-b" -> null
+google_storage_bucket.basic-data: Destroying... [id=bd1-dataproc-data]
+google_dataproc_cluster.basic-cluster: Destroying... [id=projects/hobby-367318/regions/europe-west1/clusters/bd1]
+google_storage_bucket.basic-data: Destruction complete after 3s
+google_dataproc_cluster.basic-cluster: Still destroying... [id=projects/hobby-367318/regions/europe-west1/clusters/bd1, 10s elapsed]
+google_dataproc_cluster.basic-cluster: Still destroying... [id=projects/hobby-367318/regions/europe-west1/clusters/bd1, 20s elapsed]
+google_dataproc_cluster.basic-cluster: Still destroying... [id=projects/hobby-367318/regions/europe-west1/clusters/bd1, 30s elapsed]
+google_dataproc_cluster.basic-cluster: Destruction complete after 32s
+google_project_iam_binding.default["roles/dataproc.worker"]: Destroying... [id=hobby-367318/roles/dataproc.worker]
+google_storage_bucket.staging-data: Destroying... [id=bd1-datproc-staging-data]
+google_project_iam_binding.default["roles/storage.admin"]: Destroying... [id=hobby-367318/roles/storage.admin]
+google_storage_bucket.staging-data: Destruction complete after 1s
+google_project_iam_binding.default["roles/storage.admin"]: Destruction complete after 9s
+google_project_iam_binding.default["roles/dataproc.worker"]: Destruction complete after 9s
+google_service_account.default: Destroying... [id=projects/hobby-367318/serviceAccounts/dataproc-default@hobby-367318.iam.gserviceaccount.com]
+google_service_account.default: Destruction complete after 1s
+
+Destroy complete! Resources: 6 destroyed.
+
+
+
